@@ -22,6 +22,12 @@ var albums = []album{
 	{ID: "3", Title: "Sarah Vaughan", Artist: "Sarah Vaughan", Price: 39.99},
 }
 
+func main() {
+	router := getRouter()
+
+	router.Run("localhost:8080")
+}
+
 func getAlbums(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, albums)
 }
@@ -47,7 +53,6 @@ func updateAlbumsById(c *gin.Context) {
 		}
 	}
 	c.IndentedJSON(http.StatusNotFound, error{"not found"})
-
 }
 
 func getAlbumById(c *gin.Context) {
@@ -82,10 +87,4 @@ func getRouter() *gin.Engine {
 	router.PUT("/albums/:id", updateAlbumsById)
 	router.POST("/albums", postAlbums)
 	return router
-}
-
-func main() {
-	router := getRouter()
-
-	router.Run("localhost:8080")
 }
