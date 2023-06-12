@@ -24,7 +24,6 @@ var albums = []album{
 
 func main() {
 	router := getRouter()
-
 	router.Run("localhost:8080")
 }
 
