@@ -17,33 +17,33 @@ func TestAlbumsList(t *testing.T) {
 	w := httptest.NewRecorder()
 	handleRequest(w, request)
 	if w.Code != http.StatusOK {
-		t.Fatal("statos not OK")
+		t.Fatal("status not OK")
 	}
 }
 
 func TestAlbumDetail(t *testing.T) {
-	IDalbum := "1"
-	request, _ := http.NewRequest("GET", "/albums/"+IDalbum, strings.NewReader(""))
+	albumID := "3"
+	request, _ := http.NewRequest("GET", "/albums/"+albumID, strings.NewReader(""))
 	w := httptest.NewRecorder()
 	handleRequest(w, request)
 	if w.Code != http.StatusOK {
-		t.Fatal("statos not OK")
+		t.Fatal("status not OK", w.Code)
 	}
 }
 
 func TestAlbumNotFound(t *testing.T) {
-	IDalbum := "14"
-	request, _ := http.NewRequest("GET", "/albums/"+IDalbum, strings.NewReader(""))
+	albumID := "9999"
+	request, _ := http.NewRequest("GET", "/albums/"+albumID, strings.NewReader(""))
 	w := httptest.NewRecorder()
 	handleRequest(w, request)
 	if w.Code != http.StatusNotFound {
-		t.Fatal("status 404")
+		t.Fatal("status 404", w.Code)
 	}
 }
 
 func TestDeleteAlbum(t *testing.T) {
-	IDalbum := "1"
-	request, _ := http.NewRequest("DELETE", "/albums/"+IDalbum, strings.NewReader(""))
+	albumID := "1"
+	request, _ := http.NewRequest("DELETE", "/albums/"+albumID, strings.NewReader(""))
 	w := httptest.NewRecorder()
 	handleRequest(w, request)
 	if w.Code != http.StatusNoContent {
@@ -52,8 +52,8 @@ func TestDeleteAlbum(t *testing.T) {
 
 }
 func TestDeleteAlbumNotFound(t *testing.T) {
-	IDalbum := "1"
-	request, _ := http.NewRequest("DELETE", "/albums/"+IDalbum, strings.NewReader(""))
+	albumID := "999999"
+	request, _ := http.NewRequest("DELETE", "/albums/"+albumID, strings.NewReader(""))
 	w := httptest.NewRecorder()
 	handleRequest(w, request)
 	if w.Code != http.StatusNotFound {
@@ -62,8 +62,8 @@ func TestDeleteAlbumNotFound(t *testing.T) {
 }
 
 func TestUpdateAlbum(t *testing.T) {
-	IDalbum := "2"
-	request, _ := http.NewRequest("PUT", "/albums/"+IDalbum, strings.NewReader(`{"title": "Karlos Makaroni"}`))
+	albumID := "3"
+	request, _ := http.NewRequest("PUT", "/albums/"+albumID, strings.NewReader(`{"id": "4", "title": "TEST", "artist": "TEST", "price": 56.99}`))
 	w := httptest.NewRecorder()
 	handleRequest(w, request)
 	if w.Code != http.StatusOK {
@@ -72,8 +72,8 @@ func TestUpdateAlbum(t *testing.T) {
 }
 
 func TestUpdateAlbumNotFound(t *testing.T) {
-	IDalbum := "999"
-	request, _ := http.NewRequest("PUT", "/albums/"+IDalbum, strings.NewReader(""))
+	albumID := "99999999999"
+	request, _ := http.NewRequest("PUT", "/albums/"+albumID, strings.NewReader(`{"id": "4", "title": "Gib Beam", "artist": "John Coltrane", "price": 56.99}`))
 	w := httptest.NewRecorder()
 	handleRequest(w, request)
 	if w.Code != http.StatusNotFound {
@@ -82,8 +82,8 @@ func TestUpdateAlbumNotFound(t *testing.T) {
 }
 
 func TestUpdateBadStructure(t *testing.T) {
-	IDalbum := "2"
-	request, _ := http.NewRequest("PUT", "/albums/"+IDalbum, strings.NewReader(`{"title": "Karlos Makaroni"}`))
+	albumID := "9999"
+	request, _ := http.NewRequest("POST", "/albums/"+albumID, strings.NewReader(`{"title": "Karlos Makaroni"}`))
 	w := httptest.NewRecorder()
 	handleRequest(w, request)
 	if w.Code != http.StatusNotFound {
@@ -96,15 +96,15 @@ func TestCreateBadStructure(t *testing.T) {
 	w := httptest.NewRecorder()
 	handleRequest(w, request)
 	if w.Code != http.StatusBadRequest {
-		t.Fatal(w.Code)
+		t.Fatal("status 400", w.Code)
 	}
 }
 
 func TestCreateAlbums(t *testing.T) {
-	request, _ := http.NewRequest("POST", "/albums", strings.NewReader(`{"title": "Karlos Makaroni"}`))
+	request, _ := http.NewRequest("POST", "/albums", strings.NewReader(`{"id": "4", "title": "Gib Beam", "artist": "John Coltrane", "price": 56.99}`))
 	w := httptest.NewRecorder()
 	handleRequest(w, request)
-	if w.Code != http.StatusBadRequest {
-		t.Fatal("status created", w.Code)
+	if w.Code != http.StatusCreated {
+		t.Fatal("status created 201", w.Code)
 	}
 }
